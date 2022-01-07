@@ -8,7 +8,7 @@ import { v4 as uuidv4} from 'uuid';
 const Home = ({userObj}) => {
     const[nweet, setNweet] = useState("");
     const[nweets, setNweets] = useState([]);
-    const [attachment, setattachment] = useState();
+    const[attachment, setattachment] = useState();
 
     const que = query(collection(dbService, "nweets"), orderBy('createdAt', 'desc'));    
     
@@ -38,14 +38,17 @@ const Home = ({userObj}) => {
 
     const onSubmit = async (event) =>{
         event.preventDefault();
+        let attachmentUrl = "";
         console.log(`느윗 : ${nweet}`);
-        const fileRef = ref(storageService, `${userObj.uid}/${uuidv4()}`);
+        if(!(attachment == "" || attachment == undefined)){
+            console.log(`이미지 파일 작업 진입`)
+            const fileRef = ref(storageService, `${userObj.uid}/${uuidv4()}`);
 
-        const response = await uploadString(fileRef, attachment, "data_url");
-        //console.log(response);
+            const attachmentRef = await uploadString(fileRef, attachment, "data_url");
+            //console.log(response);
 
-        const attachmentUrl = await getDownloadURL(response.ref);
-        console.log(attachmentUrl)
+            attachmentUrl = await getDownloadURL(attachmentRef.ref);
+        }
 
         await addDoc(collection(dbService, "nweets"),{
             text: nweet, 
@@ -75,6 +78,7 @@ const Home = ({userObj}) => {
 
     const onDeleteUpload = () => {
         setattachment(null);
+        
     }
 
     return (

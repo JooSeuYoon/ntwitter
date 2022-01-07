@@ -1,6 +1,7 @@
 import React, { useState } from "react";
-import { dbService } from "fbInstance";
+import { dbService, storageService } from "fbInstance";
 import { doc, deleteDoc, updateDoc } from "firebase/firestore";
+import { deleteObject, ref } from "firebase/storage";
 
 const Nweet = ({nweetObj, isOwner}) => {
     const NweetTextRef = doc(dbService, "nweets", `${nweetObj.id}`);
@@ -14,6 +15,12 @@ const Nweet = ({nweetObj, isOwner}) => {
             //delete nweet
             console.log(NweetTextRef.id)
             await deleteDoc(NweetTextRef);
+
+            if(nweetObj.attachmentUrl){
+                console.log(`사진 삭제`);
+                const urlRef = ref(storageService, nweetObj.attachmentUrl);
+                await deleteObject(urlRef);
+            }
         }
     };
 
@@ -45,7 +52,7 @@ const Nweet = ({nweetObj, isOwner}) => {
         ) : (
         <>
         <h4>{nweetObj.text}</h4>
-        {nweetObj.attachmentUrl && <img src= {nweetObj.attachmentUrl}></img>}
+        {nweetObj.attachmentUrl && <img src= {nweetObj.attachmentUrl} width="100px" height="100px"></img>}
         <br></br>
         {isOwner && ( <><button onClick={onDeleteClick}>Delete Nweet</button></> ) }
         {isOwner && ( <><button onClick={toggleEditing}>Edit Nweet</button></> ) }
