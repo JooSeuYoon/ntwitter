@@ -1,9 +1,8 @@
 import { authService, dbService } from "fbInstance";
 import { updateProfile } from "firebase/auth";
 import { collection, getDocs, orderBy, query, where } from "firebase/firestore";
-import React, { useState } from "react";
-import { useHistory } from "react-router-dom/cjs/react-router-dom.min";
-import { useEffect } from "react/cjs/react.development";
+import React, { useEffect, useState } from "react";
+import { useHistory } from "react-router-dom";
 
 
 export default ( { refreshUser, userObj} ) => {
