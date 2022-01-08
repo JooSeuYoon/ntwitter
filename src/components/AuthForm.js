@@ -2,6 +2,8 @@ import { authService } from "fbInstance";
 import { createUserWithEmailAndPassword, signInWithEmailAndPassword } from "firebase/auth";
 import React, { useState } from "react";
 
+const inputStyles = { };
+
 const AuthForm = () => {
 
     const [email, setEmail] = useState("");
@@ -40,13 +42,13 @@ const AuthForm = () => {
 
     return (
         <>
-        <form onSubmit={onSubmit}>
-            <input name = "email" type = "text" placeholder="Email" required = "email" value = {email} onChange={onChange}></input>
-            <input name = "password" type = "password" placeholder="Password" required = "password" value = {password} onChange={onChange}></input>
-            <input type = "submit" value={newAccout ? "Create Account" : "Log In"} />
-            {error}
+        <form onSubmit={onSubmit} className="container">
+            <input name = "email" type = "text" placeholder="Email" required = "email" value = {email} onChange={onChange} className="authInput"></input>
+            <input name = "password" type = "password" placeholder="Password" required = "password" value = {password} onChange={onChange} className="authInput"></input>
+            <input type = "submit" className="authInput authSubmit" value={newAccout ? "Create Account" : "Log In"} />
+            {error && <span className="authError">{error}</span>}
         </form>
-        <span onClick={toggleAccount}>{newAccout ? "Sign In" : "Create Account"}</span>
+        <span onClick={toggleAccount} className="authSwitch">{newAccout ? "Sign In" : "Create Account"}</span>
         </>
     )
 };
